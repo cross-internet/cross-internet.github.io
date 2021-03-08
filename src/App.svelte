@@ -1,9 +1,13 @@
 <script>
 	import { onMount } from "svelte";
+	import moment from "moment";
+	import "moment/locale/ja";
 
 	let data = [];
 	onMount(async () => {
-		data = await (await fetch("https://raw.githubusercontent.com/diamondcatpng/cross-internet/api/article.json")).json();
+		const res = await (await fetch("https://raw.githubusercontent.com/diamondcatpng/cross-internet/api/article.json")).json();
+		res.sort(() => Math.random() - 0.5);
+		data = res;
 	});
 
 	async function sleep(ms) {
@@ -19,60 +23,32 @@
 	{#each data as content, i}
 		{#await sleep(i * 100) then _}
 			<a class="outline-none border hover:shadow-inner hover:bg-gray-100" href={content.url} target="_blank">
-				<div class="p-4 break-words">
+				<div class="h-full p-4 break-words flex flex-col justify-between">
 					{#await ogp(content.url)}
 						<p>読み込み中…</p>
 					{:then ogp}
-						<img class="w-full md:w-40 mb-2 md:mb-0 md:float-right md:rounded-3xl" src="https://images.weserv.nl/?url={ogp.image}&w=512&format=webp" alt={ogp.title} />
-						<h2 class="text-xl font-bold">{ogp.title}</h2>
-						<p class="text-gray-600">{ogp.description}</p>
+						<div>
+							<img class="w-full md:w-40 mb-2 md:mb-0 md:float-right md:rounded-3xl" src="https://images.weserv.nl/?url={ogp.image}&w=512&format=webp" alt={ogp.title} />
+							<h2 class="text-xl font-bold">{ogp.title}</h2>
+							<p class="text-gray-600">{ogp.description}</p>
+						</div>
+						<div>
+							<hr class="my-3" />
+							<div class="flex items-center justify-between">
+								<div class="flex">
+									<img class="w-6 mx-1" src="https://images.weserv.nl/?url={ogp.icon}&format=webp" alt={ogp.provider} />
+									<span>{ogp.provider}</span>
+								</div>
+								<div class="text-xs text-gray-600">
+									<span>{content.traffic}</span>
+									<span class="mx-1">&bull;</span>
+									<span>{moment(content.date).fromNow()}</span>
+								</div>
+							</div>
+						</div>
 					{/await}
 				</div>
 			</a>
 		{/await}
 	{/each}
 </div>
-
-<!-- <div
-	class="h-screen overflow-y-scroll"
-	on:mousewheel={() => console.log("a")}
->
-		<div style="height: 1px;" />
-	<div class="h-screen bg-green-400" />
-		<div style="height: 1px;" />
-</div> -->
-
-<!-- <div class="grid md:grid-cols-2 xl:grid-cols-4">
-	{#each data as content}
-		{#await ogp(content.url)}
-			<p>読み込み中…</p>
-		{:then ogp}
-			<div class="overflow-hidden break-words">
-				<div class="m-4 border-2 rounded-lg hover:shadow-lg {content.live ? 'bg-red-300' : content.upcoming ? 'bg-green-300' : ''}">
-					<a href={content.url} target="_blank" class="outline-none">
-						<div class="p-4 flex justify-between">
-							<div class="flex items-center">
-								<img class="w-8" src="https://images.weserv.nl/?url={ogp.icon}&format=webp" alt={ogp.provider} />
-								<p class="ml-4">{ogp.provider}</p>
-							</div>
-							{#if content.live || content.upcoming}
-								<div class="flex items-center">
-									<span class="text-xl font-semibold {content.live ? 'text-red-600' : content.upcoming ? 'text-green-600' : ''}">{content.live ? "ライブ" : content.upcoming ? "待機枠" : ""}</span>
-								</div>
-							{/if}
-						</div>
-						{#if ogp.image}
-							<img class="w-full" src="https://images.weserv.nl/?url={ogp.image}&w=512&format=webp" alt={ogp.title} />
-						{/if}
-						<div class="px-6 py-4">
-							<div class="mb-2 font-bold text-xl">{ogp.title}</div>
-							{#if ogp.description}
-								<p class="text-base text-gray-700">{ogp.description}</p>
-							{/if}
-						</div>
-					</a>
-				</div>
-			</div>
-		{/await}
-	{/each}
-</div> -->
