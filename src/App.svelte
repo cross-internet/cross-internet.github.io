@@ -25,7 +25,7 @@
 				{:then ogp}
 					<div class="h-full flex flex-col justify-between">
 						<div>
-							<img class="w-full md:w-40 mb-2 md:mb-0 md:float-right md:rounded-3xl" src="https://images.weserv.nl/?url={ogp.image}&w=512&format=webp" alt={ogp.title} />
+							<img class="w-full md:w-40 mb-2 md:mb-0 md:float-right md:rounded-3xl" src="https://images.weserv.nl/?url={ogp.image}&w=512&output=webp" alt={ogp.title} />
 							<h2 class="text-xl font-bold">{ogp.title}</h2>
 							<p class="text-gray-600">{ogp.description}</p>
 						</div>
@@ -33,7 +33,7 @@
 							<hr class="my-3" />
 							<div class="flex items-center justify-between">
 								<div class="flex">
-									<img class="w-6 mx-1" src="https://images.weserv.nl/?url={ogp.icon}&format=webp" alt={ogp.provider} />
+									<img class="w-6 mx-1" src="https://images.weserv.nl/?url={ogp.icon}&output=webp" alt={ogp.provider} />
 									<span>{ogp.provider}</span>
 								</div>
 								<div class="text-xs text-gray-600">
