@@ -10,23 +10,20 @@
 		data = shuffle(res, { copy: true });
 	});
 
-	async function sleep(ms) {
+	async function ogp(url, ms) {
 		await new Promise((x) => setTimeout(x, ms));
-	}
-
-	async function ogp(url) {
 		return await (await fetch("https://ricapitolare.vercel.app/?url=" + url)).json();
 	}
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
 	{#each data as content, i}
-		{#await sleep(i * 100) then _}
-			<a class="outline-none border hover:shadow-inner hover:bg-gray-100" href={content.url} target="_blank">
-				<div class="h-full p-4 break-words flex flex-col justify-between">
-					{#await ogp(content.url)}
-						<p>読み込み中…</p>
-					{:then ogp}
+		<a class="outline-none border hover:shadow-inner hover:bg-gray-100" href={content.url} target="_blank">
+			<div class="h-full p-4 break-words">
+				{#await ogp(content.url, i * 200)}
+					<p>読み込み中…</p>
+				{:then ogp}
+					<div class="h-full flex flex-col justify-between">
 						<div>
 							<img class="w-full md:w-40 mb-2 md:mb-0 md:float-right md:rounded-3xl" src="https://images.weserv.nl/?url={ogp.image}&w=512&format=webp" alt={ogp.title} />
 							<h2 class="text-xl font-bold">{ogp.title}</h2>
@@ -46,9 +43,9 @@
 								</div>
 							</div>
 						</div>
-					{/await}
-				</div>
-			</a>
-		{/await}
+					</div>
+				{/await}
+			</div>
+		</a>
 	{/each}
 </div>
