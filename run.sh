@@ -8,11 +8,12 @@ cd template
 git switch -C web -f 8b23b3ff1879ca0442775a0ebf1defab72bbb79f
 git clean -df
 
-[ ! -f ../web.patch ] || git apply ../web.patch
+[ ! -f ../web.patch ] || git am ../web.patch
 
 save() {
-  ! git diff --exit-code >/dev/null || return 0
+  ! git diff --exit-code || return 0
   git add -A
+  git reset --soft 8b23b3ff1879ca0442775a0ebf1defab72bbb79f
   git commit -m "UPDATE"
   git format-patch 8b23b3ff1879ca0442775a0ebf1defab72bbb79f --stdout > ../web.patch
 }
