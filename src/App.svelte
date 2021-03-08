@@ -50,8 +50,8 @@
 							<div>
 								<hr class="my-3" />
 								<div class="flex items-center justify-between">
-									<div class="flex">
-										<img class="w-6 mx-1" src="https://images.weserv.nl/?url={ogp.icon}&output=webp" alt={ogp.provider} />
+									<div class="flex items-center">
+										<img class="mx-1" src="https://images.weserv.nl/?url={ogp.icon}&w=32&output=webp" alt={ogp.provider} />
 										<span>{ogp.provider}</span>
 									</div>
 									<div class="text-xs text-gray-600">
