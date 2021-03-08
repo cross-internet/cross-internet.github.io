@@ -18,7 +18,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
 	{#each data as content, i}
-		<a class="outline-none border hover:shadow-inner hover:bg-gray-100" href={content.url} target="_blank">
+		<a class="outline-none border hover:shadow-inner hover:bg-gray-100" href={content.url} target="_blank" rel="noopener noreferrer">
 			<div class="h-full p-4 break-words">
 				{#await ogp(content.url, i * 200)}
 					<p>読み込み中…</p>
