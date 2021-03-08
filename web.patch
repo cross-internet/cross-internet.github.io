@@ -81,7 +81,7 @@ index bb28a94..0000000
 -	border-color: #666;
 -}
 diff --git a/src/App.svelte b/src/App.svelte
-index 10faec7..a6072f2 100644
+index 10faec7..63427c5 100644
 --- a/src/App.svelte
 +++ b/src/App.svelte
 @@ -1,30 +1,45 @@
@@ -147,7 +147,7 @@ index 10faec7..a6072f2 100644
 +
 +	<div class="h-full overflow-y-scroll p-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" on:scroll={(e) => (box = e.currentTarget)}>
 +		{#each data as content, i}
-+			<div>
++			<div class="break-words">
 +				{#if i < (now + 1) * buf}
 +					<Card url={content.url} traffic={content.traffic} date={content.date} />
 +				{/if}
@@ -157,7 +157,7 @@ index 10faec7..a6072f2 100644
 +</div>
 diff --git a/src/Card.svelte b/src/Card.svelte
 new file mode 100644
-index 0000000..d2a4bf3
+index 0000000..a97b4c4
 --- /dev/null
 +++ b/src/Card.svelte
 @@ -0,0 +1,36 @@
@@ -175,7 +175,7 @@ index 0000000..d2a4bf3
 +    <a class="outline-none" href={url} target="_blank" rel="noopener noreferrer">
 +        <div class="rounded-xl overflow-hidden border-2 hover:shadow-md">
 +            <img class="w-full" src="https://images.weserv.nl/?url={data.image}&w=512&output=webp" alt={data.title} />
-+            <div class="p-4 break-words">
++            <div class="p-4">
 +                <p class="text-xl font-semibold">{data.title}</p>
 +                <p class="mt-3 text-sm text-gray-600">{data.description}</p>
 +                <hr class="my-3" />
