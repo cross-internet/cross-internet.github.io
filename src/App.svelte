@@ -20,7 +20,7 @@
 	let loading = 0;
 
 	setInterval(() => {
-		if (loading < data.length && scrollY + windowHeight * 1.3 > contentHeight) {
+		if (loading < data.length && scrollY + windowHeight * 2 > contentHeight) {
 			loading++;
 			console.log(loading);
 		}
