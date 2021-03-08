@@ -1,15 +1,15 @@
-From 56a8c19fdfd5bcdef82314d39fec075464aaeaa5 Mon Sep 17 00:00:00 2001
+From bbd0e991fe8f2e6c6187752abc04bbd1e0950c70 Mon Sep 17 00:00:00 2001
 From: Diamond Cat <uyuuki0919@icloud.com>
-Date: Mon, 8 Mar 2021 19:57:30 +0900
+Date: Mon, 8 Mar 2021 22:44:16 +0900
 Subject: [PATCH] UPDATE
 
 ---
  package.json      |   2 +
  public/global.css |  63 -----
- src/App.svelte    |  88 +++++--
+ src/App.svelte    |  82 ++++--
  src/main.js       |   4 +-
  yarn.lock         | 651 ++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 719 insertions(+), 89 deletions(-)
+ 5 files changed, 712 insertions(+), 90 deletions(-)
  delete mode 100644 public/global.css
  create mode 100644 yarn.lock
 
@@ -96,10 +96,10 @@ index bb28a94..0000000
 -	border-color: #666;
 -}
 diff --git a/src/App.svelte b/src/App.svelte
-index 10faec7..109d50f 100644
+index 10faec7..61f976e 100644
 --- a/src/App.svelte
 +++ b/src/App.svelte
-@@ -1,30 +1,72 @@
+@@ -1,30 +1,64 @@
  <script>
 -	export let name;
 -</script>
@@ -112,11 +112,9 @@ index 10faec7..109d50f 100644
 -	<h1>Hello {name}!</h1>
 -	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
 -</main>
-+	let data = [];
-+	onMount(async () => {
-+		const res = await (await fetch("https://raw.githubusercontent.com/diamondcatpng/cross-internet/api/article.json")).json();
-+		data = shuffle(res, { copy: true });
-+	});
++	let random = true;
++	let res = [];
++	$: data = random ? shuffle(res, { copy: true }) : res;
  
 -<style>
 -	main {
@@ -124,76 +122,71 @@ index 10faec7..109d50f 100644
 -		padding: 1em;
 -		max-width: 240px;
 -		margin: 0 auto;
-+	async function ogp(url) {
-+		return await (await fetch("https://ricapitolare.vercel.app/?url=" + url)).json();
- 	}
+-	}
++	onMount(async () => {
++		res = await (await fetch("https://raw.githubusercontent.com/diamondcatpng/cross-internet/api/article.json")).json();
++	});
  
 -	h1 {
 -		color: #ff3e00;
 -		text-transform: uppercase;
 -		font-size: 4em;
 -		font-weight: 100;
--	}
-+	let scrollY;
-+	let windowHeight;
-+	let contentHeight;
-+	let loading = 0;
++	async function ogp(url, ms) {
++		await new Promise((x) => setTimeout(x, ms));
++		return await (await fetch("https://ricapitolare.vercel.app/?url=" + url)).json();
+ 	}
++</script>
  
 -	@media (min-width: 640px) {
 -		main {
 -			max-width: none;
-+	setInterval(() => {
-+		if (loading < data.length && scrollY + windowHeight * 2 > contentHeight) {
-+			loading++;
-+			console.log(loading);
- 		}
+-		}
 -	}
 -</style>
 \ No newline at end of file
-+	}, 100);
-+</script>
-+
-+<svelte:window bind:innerHeight={windowHeight} bind:scrollY />
-+
 +<svelte:head>
 +	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" media="print" onload="this.media='all'" />
 +</svelte:head>
 +
-+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4" bind:offsetHeight={contentHeight}>
++<div class="py-6 flex justify-evenly">
++	<label>
++		<input type="checkbox" bind:checked={random} />
++		<span>ランダム</span>
++	</label>
++</div>
++
++<div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 +	{#each data as content, i}
-+		{#if i < loading}
-+			<a class="outline-none border hover:shadow-inner hover:bg-gray-100" href={content.url} target="_blank" rel="noopener noreferrer">
-+				<div class="h-full p-4 break-words">
-+					{#await ogp(content.url)}
-+						<p>読み込み中…</p>
-+					{:then ogp}
-+						<div class="h-full flex flex-col justify-between">
-+							<div>
-+								<img class="w-full md:w-40 mb-2 md:mb-0 md:float-right md:rounded-3xl" src="https://images.weserv.nl/?url={ogp.image}&w=512&output=webp" alt={ogp.title} />
-+								<h2 class="text-xl font-bold">{ogp.title}</h2>
-+								<p class="text-gray-600">{ogp.description}</p>
-+							</div>
-+							<div>
-+								<hr class="my-3" />
-+								<div class="flex items-center justify-between">
-+									<div class="flex items-center">
-+										<img class="mx-1" src="https://images.weserv.nl/?url={ogp.icon}&w=32&output=webp" alt={ogp.provider} />
-+										<span>{ogp.provider}</span>
-+									</div>
-+									<div class="text-xs text-gray-600">
-+										<span>{content.traffic}</span>
-+										<span class="mx-1">&bull;</span>
-+										<span>{moment(content.date).fromNow()}</span>
-+									</div>
++		<div>
++			{#await ogp(content.url, i * 100)}
++				<p>読み込み中…</p>
++			{:then ogp}
++				<a class="outline-none" href={content.url} target="_blank" rel="noopener noreferrer">
++					<div class="rounded-xl overflow-hidden border-2 hover:shadow-md">
++						<img class="w-full" src="https://images.weserv.nl/?url={ogp.image}&w=512&output=webp" alt={ogp.title} />
++						<div class="p-4 break-words">
++							<p class="text-xl font-semibold">{ogp.title}</p>
++							<p class="mt-3 text-sm text-gray-600">{ogp.description}</p>
++							<hr class="my-3" />
++							<div class="flex justify-between text-xs text-gray-600">
++								<div class="flex items-center">
++									<img src="https://images.weserv.nl/?url={ogp.icon}&w=16&output=webp" alt={ogp.provider} />
++									<span class="ml-1">{ogp.provider}</span>
++								</div>
++								<div>
++									<span>{content.traffic}</span>
++									<span class="mx-1">&bull;</span>
++									<span>{moment(content.date).fromNow()}</span>
 +								</div>
 +							</div>
 +						</div>
-+					{:catch error}
-+						<p>{error}</p>
-+					{/await}
-+				</div>
-+			</a>
-+		{/if}
++					</div>
++				</a>
++			{:catch error}
++				<p>{error}</p>
++			{/await}
++		</div>
 +	{/each}
 +</div>
 diff --git a/src/main.js b/src/main.js
