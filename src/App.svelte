@@ -1,13 +1,13 @@
 <script>
 	import { onMount } from "svelte";
+	import shuffle from "shuffle-array";
 	import moment from "moment";
 	import "moment/locale/ja";
 
 	let data = [];
 	onMount(async () => {
 		const res = await (await fetch("https://raw.githubusercontent.com/diamondcatpng/cross-internet/api/article.json")).json();
-		res.sort(() => Math.random() - 0.5);
-		data = res;
+		data = shuffle(res, { copy: true });
 	});
 
 	async function sleep(ms) {
