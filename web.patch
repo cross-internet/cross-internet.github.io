@@ -157,7 +157,7 @@ index 10faec7..63427c5 100644
 +</div>
 diff --git a/src/Card.svelte b/src/Card.svelte
 new file mode 100644
-index 0000000..a97b4c4
+index 0000000..5949293
 --- /dev/null
 +++ b/src/Card.svelte
 @@ -0,0 +1,36 @@
@@ -181,7 +181,7 @@ index 0000000..a97b4c4
 +                <hr class="my-3" />
 +                <div class="flex justify-between text-xs text-gray-600">
 +                    <div class="flex items-center">
-+                        <img src="https://images.weserv.nl/?url={data.icon}&w=16&output=webp" alt={data.provider} />
++                        <img width="16" height="16" src="https://images.weserv.nl/?url={data.icon}&w=16&h=16&output=webp" alt={data.provider} />
 +                        <span class="ml-1">{data.provider}</span>
 +                    </div>
 +                    <div>
