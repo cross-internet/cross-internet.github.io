@@ -1,30 +1,48 @@
 <script>
-	export let name;
+	import { onMount } from "svelte";
+	import Card from "./Card.svelte";
+	import arrayShuffle from "array-shuffle";
+
+	let json = [];
+
+	onMount(async () => {
+		const r = await fetch("https://raw.githubusercontent.com/diamondcatpng/cross-internet/api/article.json");
+		json = await r.json();
+	});
+
+	let random = true;
+	$: data = random ? arrayShuffle(json) : json;
+
+	let buf = 20;
+	let now = 0;
+	let box;
+	$: if (box && box.scrollTop > (box.scrollHeight - box.clientHeight) * 0.9) {
+		now++;
+		console.log(now);
+	}
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<div class="h-screen flex flex-col">
+	<div class="py-6 flex justify-evenly" on:change={() => ((now = 0), (box = undefined))}>
+		<label>
+			<input type="checkbox" bind:checked={random} />
+			<span>ランダム</span>
+		</label>
+	</div>
 
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+	<div class="h-full overflow-y-scroll p-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" on:scroll={(e) => (box = e.currentTarget)}>
+		{#each data as content, i}
+			<div class="break-words">
+				{#if i < (now + 1) * buf}
+					<Card url={content.url} traffic={content.traffic} date={content.date} />
+				{/if}
+			</div>
+		{/each}
+	</div>
+</div>
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+<style global lang="postcss">
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
 </style>
