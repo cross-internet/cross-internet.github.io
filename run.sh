@@ -8,7 +8,7 @@ cd template
 git switch -C web -f 8b23b3ff1879ca0442775a0ebf1defab72bbb79f
 git clean -df
 
-[ ! -f ../web.patch ] || git am --signoff ../web.patch
+[ ! -f ../web.patch ] || git -c user.name='null' -c user.email='null@example.com' am --signoff ../web.patch
 
 save() {
   git add -A
