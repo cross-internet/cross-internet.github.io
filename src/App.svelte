@@ -1,7 +1,8 @@
 <script>
 	import { onMount } from "svelte";
-	import Card from "./Card.svelte";
 	import arrayShuffle from "array-shuffle";
+	import Head from "./Head.svelte";
+	import Card from "./Card.svelte";
 
 	let json = [];
 
@@ -22,6 +23,8 @@
 	}
 </script>
 
+<Head />
+
 <div class="h-screen flex flex-col">
 	<div class="py-6 flex justify-evenly" on:change={() => ((now = 0), (box = undefined))}>
 		<label>
@@ -40,9 +43,3 @@
 		{/each}
 	</div>
 </div>
-
-<style global lang="postcss">
-	@tailwind base;
-	@tailwind components;
-	@tailwind utilities;
-</style>
