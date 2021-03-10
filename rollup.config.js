@@ -43,10 +43,7 @@ export default {
 				// enable run-time checks when not in production
 				dev: !production
 			},
-			// etc...
 			preprocess: sveltePreprocess({
-				// https://github.com/kaisermann/svelte-preprocess/#user-content-options
-				sourceMap: !production,
 				postcss: {
 					plugins: [
 						require("tailwindcss"),
