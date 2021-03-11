@@ -7,7 +7,7 @@
 	let json = [];
 
 	onMount(async () => {
-		const r = await fetch("https://raw.githubusercontent.com/cross-internet/api/main/public/article.json");
+		const r = await fetch("https://raw.githubusercontent.com/cross-internet/api/main/public/v2.json");
 		json = await r.json();
 	});
 
